@@ -1,0 +1,36 @@
+name: Deploy Chatbot App
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create .env file
+        run: echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" > .env && echo "NEON_DATABASE_URL=${{ secrets.NEON_DATABASE_URL }}" >> .env
+
+      - name: Build docker image
+        run: docker build -t jettiworks/next-chatbot .
+
+      - name: Log in to Docker Hub
+        run: docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Push Docker image
+        run: docker push jettiworks/next-chatbot:latest
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: pull latest Docker image
+        run: docker pull jettiworks/next-chatbot:latest
+
+      - name: remove old container
+        run: docker rm -f chatbot-container
+
+      - name: run docker container
+        run: docker run -d -p 3000:3000 --name chatbot-container jettiworks/next-chatbot
