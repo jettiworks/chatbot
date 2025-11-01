@@ -26,11 +26,11 @@ jobs:
     needs: build
     runs-on: self-hosted
     steps:
-      - name: pull latest Docker image
+      - name: Pull image from docker hub
         run: docker pull jettiworks/next-chatbot:latest
 
       - name: remove old container
         run: docker rm -f chatbot-container
 
-      - name: run docker container
+      - name: Run docker container
         run: docker run -d -p 3000:3000 --name chatbot-container jettiworks/next-chatbot
