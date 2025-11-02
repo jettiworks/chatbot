@@ -49,7 +49,7 @@ export async function POST(request: Request) {
       model: openai("gpt-4.1-mini"),
       messages: convertToModelMessages(messages),
       tools,
-      system: "your are heleful assisant . use the tools to answer user questions .",
+      system: "your are heleful assisant. use the tools to answer user questions .",
       stopWhen: stepCountIs(2),
     });
 
