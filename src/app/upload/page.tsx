@@ -61,7 +61,7 @@ export default function PDFUpload() {
                 className="mt-2"
               />
             </div>
-            <div className="text-sm">File size less then 10 MB</div>
+            <div className="text-sm">File size less then 20 MB</div>
             {isLoading && (
               <div className="flex items-center space-x-2 text-blue-600">
                 <Loader2 className="h-5 w-5 animate-spin" />
